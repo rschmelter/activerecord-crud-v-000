@@ -10,7 +10,7 @@ describe 'Movie' do
   it 'inherits from ActiveRecord::Base' do
     expect(Movie.superclass).to eq(ActiveRecord::Base)
   end
-
+  
   context 'Movie.new' do
     let(:movie) { Movie.new }
     it 'has a title' do
@@ -24,8 +24,8 @@ describe 'Movie' do
     end
 
     it 'has a director' do
-      movie.director = "The Wachowski Sisters"
-      expect(movie.director).to eq("The Wachowski Sisters")
+      movie.director = "The Wachowski Brothers"
+      expect(movie.director).to eq("The Wachowski Brothers")
     end
 
     it 'has a lead actor/actress' do
@@ -35,7 +35,7 @@ describe 'Movie' do
 
     it 'has an in theaters flag' do
       movie.in_theaters = false
-      expect(movie.in_theaters?).to be_falsey
+      expect(movie.in_theaters).to eq(false)
     end
   end
 
@@ -44,7 +44,7 @@ describe 'Movie' do
       expect{Movie.new}.to_not raise_error
     end
 
-    it 'can be instantiated with a hash of attributes' do
+    it 'can be instantiated with a hasn of attributes' do
       expect{Movie.new(attributes)}.to_not raise_error
     end
   end
@@ -60,21 +60,23 @@ describe 'Movie' do
   context 'basic CRUD' do
     context 'creating' do
       it 'can be instantiated and then saved' do
-        can_be_instantiated_and_then_saved
+        movie = __
+        movie.title = "This is a title."
+        __
         expect(Movie.find_by(title: "This is a title.").title).to eq("This is a title.")
       end
 
       it 'can be created with a hash of attributes' do
-        movie = can_be_created_with_a_hash_of_attributes
-        expect(Movie.find_by(attributes)).to eq(movie)
+        movie = __
+        expect(Movie.find_by(__)).to eq(movie)
       end
 
       it 'can be created in a block' do
-        movie = can_be_created_in_a_block
+        movie = Movie.create do |m|
+          __
+        end
 
         expect(Movie.last).to eq(movie)
-        expect(Movie.last.title).to eq("Home Alone")
-        expect(Movie.last.release_date).to eq(1990)
       end
     end
 
@@ -84,64 +86,71 @@ describe 'Movie' do
           Movie.create(title: "Movie_#{i}", release_date: i+2000)
         end
       end
-
+      
       it 'can get the first item in the database' do
-        movie = can_get_the_first_item_in_the_database
-        expect(movie).to eq("Movie_0")
+        expect(__).to eq("Movie_0")
       end
 
       it 'can get the last item in the databse' do
-        movie = can_get_the_last_item_in_the_database
-        expect(movie).to eq("Movie_4")
+        expect(__).to eq("Movie_4")
       end
 
-      it 'can get size of the database' do
-        movies_size = can_get_size_of_the_database
-        expect(movies_size).to eq(5)
+      it 'can get all items from the database' do
+        expect(__).to eq(5)
       end
 
-      it 'can retrive the first item from the database by id' do
-        expect(can_find_the_first_item_from_the_database_using_id).to eq("Movie_0")
+      it 'can retrive from the database using an id' do
+        expect(Movie.find(1).title).to eq(__)
       end
 
       it 'can retrieve from the database using different attributes' do
         movie = Movie.create(title: "Title", release_date: 2000, director: "Me")
-        expect(can_find_by_multiple_attributes).to eq(movie)
+        expect(__).to eq(movie)
       end
 
       it 'can use a where clause and be sorted' do
-        expect(can_find_using_where_clause_and_be_sorted.map{|m| m.title}).to eq(["Movie_4", "Movie_3"])
+        expect(__.map{|m| m.title}).to eq(["Movie_4", "Movie_3"])
       end
     end
 
     context 'updating' do
       it 'can be found, updated, and saved' do
-        movie = Movie.create(title: "Awesome Flick")
-        expect {
-          can_be_found_updated_and_saved
-          movie.reload
-        }.to change{ movie.title }.from("Awesome Flick").to("Even Awesomer Flick")
+        Movie.create(title: "Awesome Flick")
+        __
+        __
+        __
+        expect(Movie.find_by(title: "Even Awesomer Flick")).to_not be_nil
       end
 
       it 'can be updated using #update' do
-        can_update_using_update_method
+        Movie.create(title: "Wat?")
+        __
+        __
         expect(Movie.find_by(title: "Wat, huh?")).to_not be_nil
       end
 
       it 'can update all records at once' do
-        can_update_multiple_items_at_once
+        5.times do |i|
+          Movie.create(title: "Movie_#{i}", release_date: 2000+i)
+        end
+        __
         expect(Movie.where(title: "A Movie").size).to eq(5)
       end
     end
 
     context 'destroying' do
       it 'can destroy a single item' do
-        can_destroy_a_single_item
+        Movie.create(title: "That One Where the Guy Kicks Another Guy Once")
+        __
+        __
         expect(Movie.find_by(title: "That One Where the Guy Kicks Another Guy Once")).to be_nil
       end
 
       it 'can destroy all items at once' do
-        can_destroy_all_items_at_once
+        10.times do |i|
+          Movie.create(title: "Movie_#{i}")
+        end
+        __
         expect(Movie.all.size).to eq(0)
       end
     end

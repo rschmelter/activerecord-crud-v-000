@@ -23,7 +23,3 @@ RSpec.configure do |config|
 
   config.order = 'default'
 end
-
-def __
-  raise "Replace __ with test code."
-end
